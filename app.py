@@ -3,6 +3,7 @@ import json
 import numpy as np
 import pandas as pd
 import time
+import datetime as dt
 from keras.models import model_from_json
 from sklearn.preprocessing import MinMaxScaler
 
@@ -42,12 +43,18 @@ def get_price():
 def get_price_of_last_7_days():
 	if request.method == 'GET':
 		df = pd.read_csv('static/dataset/DelhiPrice.csv')
-		items = []
+		items = {}
+		today = dt.datetime.now()
 		for i in reversed(range(7)):
-			items.append(str(df['Weighted_Price'][i]))
-		return jsonify(
-			Items=items
-		)
+			items[(today - dt.timedelta(days=i)).strftime('%d-%m-%Y')] = str(df['Weighted_Price'][i])
+		return jsonify(items)
+
+# @app.route('/predictforweek', methods=['GET'])
+# def get_predictions_for_a_week():
+# 	if request.method == 'GET':
+# 		week = predict_petrol_price_week()
+# 		print(week)
+# 		return "Success"
 
 @app.route('/uploadmodeljson', methods=['GET', 'POST'])
 def upload_model_json():
