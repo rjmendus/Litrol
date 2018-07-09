@@ -6,7 +6,7 @@ app = Flask(__name__)
 def home():
 	return "Howdy! It's up!"
 
-@app.remote('/predict', methods=['GET','POST'])
+@app.route('/predict', methods=['GET','POST'])
 def predict():
 	if request.method == 'GET':
 		return "Get method is up."
