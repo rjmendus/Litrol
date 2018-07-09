@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+import json
 import numpy as np 
 import pandas as pd
 import time
@@ -11,7 +12,7 @@ app = Flask(__name__)
 def home():
 	return "Howdy! It's up!"
 
-@app.route('/predict', methods=['GET','POST'])
+@app.route('/predict', methods=['GET'])
 def predict():
 	if request.method == 'GET':
 		predicted_price =  str(predict_petrol_price())
@@ -19,15 +20,29 @@ def predict():
 		return jsonify(
 			Price=predicted_price
 		)
-	
+	else:
+		return "Not authorised."
 	return "Success"
-@app.route('/getprice', methods=['GET','POST'])
+
+@app.route('/getprice', methods=['GET'])
 def get_price():
 	if request.method == 'GET':
 		df = pd.read_csv('static/dataset/DelhiPrice.csv')
 		return jsonify(
 			Price=str(df['Weighted_Price'][0])
 		)
+	else:
+		return "Not authorised."
+
+@app.route('/uploadmodeljson', methods=['GET','POST'])
+def upload_model_json():
+	if request.method == 'POST':
+		uploaded_json = request.get_json()
+		with open('static/models/model.json', 'w') as outfile:
+			json.dump(uploaded_json, outfile)
+		return "200"
+
+	return "Error"
 
 def predict_petrol_price():
 
