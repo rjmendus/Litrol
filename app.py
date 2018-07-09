@@ -21,6 +21,13 @@ def predict():
 		)
 	
 	return "Success"
+@app.route('/getprice', methods=['GET','POST'])
+def get_price():
+	if request.method == 'GET':
+		df = pd.read_csv('static/dataset/DelhiPrice.csv')
+		return jsonify(
+			Price=str(df['Weighted_Price'][0])
+		)
 
 def predict_petrol_price():
 
