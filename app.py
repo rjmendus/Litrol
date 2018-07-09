@@ -45,7 +45,8 @@ def get_price_of_last_7_days():
 		items = [{},{},{},{},{},{},{}]
 		today = dt.datetime.now()
 		for i in reversed(range(7)):
-			items[6-i] = {"date": (today - dt.timedelta(days=i)).timestamp(),
+			items[6-i] = {"date": {"day": (today - dt.timedelta(days=i)).day,
+			"month": (today - dt.timedelta(days=i)).month, "year": (today - dt.timedelta(days=i)).year	},
 			"price": str(df['Weighted_Price'][i])}
 		return jsonify(Items=items)
 	else:
@@ -58,7 +59,8 @@ def get_predictions_for_a_week():
 		items = [{},{},{},{},{},{},{}]
 		today = dt.datetime.now()
 		for i in range(7):
-			items[i] = {"date": (today + dt.timedelta(days=i+1)).timestamp(),
+			items[i] = {"date": {"day": (today + dt.timedelta(days=i+1)).day,
+			"month": (today + dt.timedelta(days=i+1)).month, "year": (today + dt.timedelta(days=i+1)).year	},
 			"price": str(week[i]) }
 		return jsonify(Items=items)
 	else:
