@@ -170,11 +170,16 @@ def predict_petrol_price_week():
 	predicted_Petrol_price=sc.inverse_transform(predicted_Petrol_price)
 	print("Predicted Price\n", predicted_Petrol_price)
 	price=predicted_Petrol_price[prediction_days-1]
-	week.append(price[0].tolist())
-	for i in range(6):
+	print("DEBUG:\n",price)
+	for i in range(7):
 		# print("DEBUG:",price[0],price,"\n")
-		week.append(price[0].tolist())
-		price=predict_point_by_point(regressor,price)
+		print("DEBUG:\n",price)
+		try:
+			week.append(price[0][0])
+			price=predict_point_by_point(regressor,price)
+		except:
+			week.append(price[0])
+			price=predict_point_by_point(regressor,price)
 	return week
 
 def predict_point_by_point(model, data):
@@ -184,7 +189,7 @@ def predict_point_by_point(model, data):
     inputs = np.reshape(inputs, (len(inputs), 1, 1))
     predicted = model.predict(inputs)
     predicted = sc.inverse_transform(predicted)
-    print(predicted)
+    print("After Prediction: ",predicted)
     return predicted
 
 if __name__ == "__main__":
