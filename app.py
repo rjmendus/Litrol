@@ -38,6 +38,20 @@ def get_price():
 		return "Not authorised."
 
 
+# @app.route('/getlast7days', methods=['GET', 'POST'])
+# def get_price_of_last_7_days():
+# 	if request.method == 'GET':
+# 		df = pd.read_csv('static/dataset/DelhiPrice.csv')
+# 		items = [{},{},{},{},{},{},{}]
+# 		today = dt.datetime.now()
+# 		for i in reversed(range(7)):
+# 			items[6-i] = {"date": {"day": (today - dt.timedelta(days=i)).day,
+# 			"month": (today - dt.timedelta(days=i)).month, "year": (today - dt.timedelta(days=i)).year	},
+# 			"price": str(df['Weighted_Price'][i])}
+# 		return jsonify(Items=items)
+# 	else:
+# 		return "Not authorised."
+
 @app.route('/getlast7days', methods=['GET', 'POST'])
 def get_price_of_last_7_days():
 	if request.method == 'GET':
@@ -45,12 +59,25 @@ def get_price_of_last_7_days():
 		items = [{},{},{},{},{},{},{}]
 		today = dt.datetime.now()
 		for i in reversed(range(7)):
-			items[6-i] = {"date": {"day": (today - dt.timedelta(days=i)).day,
-			"month": (today - dt.timedelta(days=i)).month, "year": (today - dt.timedelta(days=i)).year	},
+			items[6-i] = {"date": (today - dt.timedelta(days=i)).strftime("%d/%m/%Y"),
 			"price": str(df['Weighted_Price'][i])}
 		return jsonify(Items=items)
 	else:
 		return "Not authorised."
+
+# @app.route('/predictforweek', methods=['GET', 'POST'])
+# def get_predictions_for_a_week():
+# 	if request.method == 'GET':
+# 		week = predict_petrol_price_week()
+# 		items = [{},{},{},{},{},{},{}]
+# 		today = dt.datetime.now()
+# 		for i in range(7):
+# 			items[i] = {"date": {"day": (today + dt.timedelta(days=i+1)).day,
+# 			"month": (today + dt.timedelta(days=i+1)).month, "year": (today + dt.timedelta(days=i+1)).year	},
+# 			"price": str(week[i]) }
+# 		return jsonify(Items=items)
+# 	else:
+# 		return "Not authorised."
 
 @app.route('/predictforweek', methods=['GET', 'POST'])
 def get_predictions_for_a_week():
@@ -59,8 +86,7 @@ def get_predictions_for_a_week():
 		items = [{},{},{},{},{},{},{}]
 		today = dt.datetime.now()
 		for i in range(7):
-			items[i] = {"date": {"day": (today + dt.timedelta(days=i+1)).day,
-			"month": (today + dt.timedelta(days=i+1)).month, "year": (today + dt.timedelta(days=i+1)).year	},
+			items[i] = {"date": (today + dt.timedelta(days=i+1)).strftime("%d/%m/%Y"),
 			"price": str(week[i]) }
 		return jsonify(Items=items)
 	else:
